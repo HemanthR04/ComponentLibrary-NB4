@@ -54,6 +54,7 @@ export default function CreateSection({
           <TabsContent value="animations" className="mt-6">
             <AnimationSection
               selectedAnimation={selectedAnimation}
+              selectedComponent={selectedComponent}
               onSelect={onSelectAnimation}
             />
           </TabsContent>

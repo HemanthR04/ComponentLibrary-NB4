@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd:*)",
+      "Bash(npx shadcn@latest add button card separator badge tabs navigation-menu scroll-area -y)"
+    ]
+  }
+}

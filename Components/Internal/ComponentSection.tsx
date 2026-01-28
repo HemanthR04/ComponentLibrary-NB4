@@ -17,31 +17,36 @@ export default function ComponentSection({
   onSelect,
 }: ComponentSectionProps) {
   return (
-    <ScrollArea className="h-[400px]">
-      <div className="space-y-3">
-        <p className="text-sm text-muted-foreground">
-          Select a component to customize
-        </p>
-        <div className="grid gap-3">
+    <div className="space-y-4">
+      <p className="text-sm text-muted-foreground">
+        Choose a component to animate
+      </p>
+      <ScrollArea className="h-[380px] pr-4">
+        <div className="space-y-3">
           {components.map((item) => (
             <Card
               key={item.id}
               className={cn(
-                "cursor-pointer transition-all",
+                "cursor-pointer transition-all duration-200 border-2",
                 selectedComponent === item.id
-                  ? "ring-2 ring-primary bg-accent"
-                  : "hover:bg-accent"
+                  ? "border-primary bg-accent/50 shadow-sm"
+                  : "border-transparent hover:border-muted-foreground/20 hover:bg-accent/30"
               )}
               onClick={() => onSelect(item.id)}
             >
               <CardContent className="p-4">
-                <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center justify-between mb-4">
                   <span className="font-medium text-sm">{item.name}</span>
-                  <Badge variant="outline" className="text-xs">
+                  <Badge
+                    variant={
+                      selectedComponent === item.id ? "default" : "secondary"
+                    }
+                    className="text-xs"
+                  >
                     {item.category}
                   </Badge>
                 </div>
-                <div className="flex items-center justify-center p-4 bg-muted rounded-md">
+                <div className="flex items-center justify-center py-6 bg-muted/50 rounded-lg">
                   {item.id === "simple-button" && (
                     <Button variant="default" size="default">
                       Click Me
@@ -62,7 +67,7 @@ export default function ComponentSection({
             </Card>
           ))}
         </div>
-      </div>
-    </ScrollArea>
+      </ScrollArea>
+    </div>
   );
 }

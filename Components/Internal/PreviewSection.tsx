@@ -38,7 +38,6 @@ export default function PreviewSection({
   const component = components.find((c) => c.id === selectedComponent);
   const animation = animations.find((a) => a.id === selectedAnimation);
 
-  // Replay animation when selection changes
   useEffect(() => {
     setAnimationKey((prev) => prev + 1);
   }, [selectedComponent, selectedAnimation]);
@@ -46,12 +45,10 @@ export default function PreviewSection({
   const generateCode = () => {
     if (!component || !animation) return "";
 
-    const animationStyle = `
-/* Add this CSS to your stylesheet */
+    const animationStyle = `/* Add this CSS to your stylesheet */
 ${animation.css}
 
-/* Or use Tailwind: ${animation.tailwind} */
-`.trim();
+/* Or use Tailwind: ${animation.tailwind} */`;
 
     const componentCode = component.code.replace(
       'className="',
@@ -89,23 +86,24 @@ ${componentCode}`;
 
   return (
     <>
-      <Card className="flex-1 flex flex-col">
-        <CardHeader className="pb-3">
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle>Preview</CardTitle>
-              <CardDescription>
+      <Card className="flex-1 flex flex-col shadow-sm">
+        <CardHeader className="space-y-1">
+          <div className="flex items-start justify-between gap-4">
+            <div className="space-y-1">
+              <CardTitle className="text-xl font-semibold">Preview</CardTitle>
+              <CardDescription className="text-sm">
                 {hasSelection
-                  ? `${component?.name} with ${animation?.name}`
-                  : "Select a component and animation to preview"}
+                  ? `${component?.name} with ${animation?.name} animation`
+                  : "Select a component and animation to see the preview"}
               </CardDescription>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 shrink-0">
               <Button
                 variant="outline"
                 size="sm"
                 onClick={onReset}
                 disabled={!selectedComponent && !selectedAnimation}
+                className="text-sm font-medium"
               >
                 Reset
               </Button>
@@ -113,6 +111,7 @@ ${componentCode}`;
                 size="sm"
                 onClick={() => setExportOpen(true)}
                 disabled={!hasSelection}
+                className="text-sm font-medium"
               >
                 Export Code
               </Button>
@@ -120,45 +119,56 @@ ${componentCode}`;
           </div>
         </CardHeader>
         <Separator />
-        <CardContent className="flex-1 flex items-center justify-center p-8">
+        <CardContent className="flex-1 flex items-center justify-center p-8 min-h-[400px]">
           {hasSelection ? (
-            <div key={animationKey} style={getAnimationStyle()}>
+            <div
+              key={animationKey}
+              style={getAnimationStyle()}
+              className="flex items-center justify-center"
+            >
               {selectedComponent === "simple-button" && (
-                <Button variant="default" size="lg">
+                <Button variant="default" size="lg" className="text-base px-8">
                   Click Me
                 </Button>
               )}
               {selectedComponent === "outline-button" && (
-                <Button variant="outline" size="lg">
+                <Button variant="outline" size="lg" className="text-base px-8">
                   Click Me
                 </Button>
               )}
               {selectedComponent === "ghost-button" && (
-                <Button variant="ghost" size="lg">
+                <Button variant="ghost" size="lg" className="text-base px-8">
                   Click Me
                 </Button>
               )}
             </div>
           ) : (
-            <div className="flex flex-col items-center gap-4 text-muted-foreground">
-              <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center">
+            <div className="flex flex-col items-center gap-6 text-center">
+              <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
+                  width="32"
+                  height="32"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  strokeWidth="2"
+                  strokeWidth="1.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
+                  className="text-muted-foreground"
                 >
                   <polygon points="5 3 19 12 5 21 5 3" />
                 </svg>
               </div>
-              <p className="text-sm">
-                Select a component and animation to preview
-              </p>
+              <div className="space-y-2">
+                <p className="text-base font-medium text-foreground">
+                  No preview yet
+                </p>
+                <p className="text-sm text-muted-foreground max-w-xs">
+                  Select a component and an animation from the left panel to see
+                  it in action
+                </p>
+              </div>
             </div>
           )}
         </CardContent>
@@ -166,19 +176,23 @@ ${componentCode}`;
 
       <Dialog open={exportOpen} onOpenChange={setExportOpen}>
         <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>Export Code</DialogTitle>
-            <DialogDescription>
-              Copy the code below to use in your project
+          <DialogHeader className="space-y-2">
+            <DialogTitle className="text-xl font-semibold">
+              Export Code
+            </DialogTitle>
+            <DialogDescription className="text-sm">
+              Copy the code below to use {component?.name} with {animation?.name}{" "}
+              animation in your project
             </DialogDescription>
           </DialogHeader>
-          <div className="relative">
-            <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-sm max-h-[400px] overflow-y-auto">
+          <div className="relative mt-4">
+            <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-sm max-h-[400px] overflow-y-auto font-mono leading-relaxed">
               <code>{generateCode()}</code>
             </pre>
             <Button
               size="sm"
-              className="absolute top-2 right-2"
+              variant={copied ? "secondary" : "default"}
+              className="absolute top-3 right-3 text-sm font-medium"
               onClick={handleCopy}
             >
               {copied ? "Copied!" : "Copy"}

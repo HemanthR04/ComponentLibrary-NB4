@@ -1,13 +1,21 @@
+"use client";
+
 import { Card, CardContent } from "@/Components/ui/card";
 import { ScrollArea } from "@/Components/ui/scroll-area";
 import { Badge } from "@/Components/ui/badge";
-import SimpleButton from "../UI Components/Buttons/SimpleButton";
+import { Button } from "@/Components/ui/button";
+import { components, ComponentId } from "@/lib/components";
+import { cn } from "@/lib/utils";
 
-const components = [
-  { id: "simple-button", name: "Simple Button", category: "Buttons", component: <SimpleButton /> },
-];
+interface ComponentSectionProps {
+  selectedComponent: ComponentId | null;
+  onSelect: (id: ComponentId) => void;
+}
 
-export default function ComponentSection() {
+export default function ComponentSection({
+  selectedComponent,
+  onSelect,
+}: ComponentSectionProps) {
   return (
     <ScrollArea className="h-[400px]">
       <div className="space-y-3">
@@ -18,7 +26,13 @@ export default function ComponentSection() {
           {components.map((item) => (
             <Card
               key={item.id}
-              className="cursor-pointer hover:bg-accent transition-colors"
+              className={cn(
+                "cursor-pointer transition-all",
+                selectedComponent === item.id
+                  ? "ring-2 ring-primary bg-accent"
+                  : "hover:bg-accent"
+              )}
+              onClick={() => onSelect(item.id)}
             >
               <CardContent className="p-4">
                 <div className="flex items-center justify-between mb-3">
@@ -28,7 +42,21 @@ export default function ComponentSection() {
                   </Badge>
                 </div>
                 <div className="flex items-center justify-center p-4 bg-muted rounded-md">
-                  {item.component}
+                  {item.id === "simple-button" && (
+                    <Button variant="default" size="default">
+                      Click Me
+                    </Button>
+                  )}
+                  {item.id === "outline-button" && (
+                    <Button variant="outline" size="default">
+                      Click Me
+                    </Button>
+                  )}
+                  {item.id === "ghost-button" && (
+                    <Button variant="ghost" size="default">
+                      Click Me
+                    </Button>
+                  )}
                 </div>
               </CardContent>
             </Card>

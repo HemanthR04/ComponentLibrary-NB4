@@ -2,8 +2,22 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/Components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/ui/tabs";
 import ComponentSection from "./ComponentSection";
 import AnimationSection from "./AnimationSection";
+import { ComponentId } from "@/lib/components";
+import { AnimationId } from "@/lib/animations";
 
-export default function CreateSection() {
+interface CreateSectionProps {
+  selectedComponent: ComponentId | null;
+  selectedAnimation: AnimationId | null;
+  onSelectComponent: (id: ComponentId) => void;
+  onSelectAnimation: (id: AnimationId) => void;
+}
+
+export default function CreateSection({
+  selectedComponent,
+  selectedAnimation,
+  onSelectComponent,
+  onSelectAnimation,
+}: CreateSectionProps) {
   return (
     <Card className="w-[400px] flex flex-col">
       <CardHeader className="pb-3">
@@ -16,10 +30,16 @@ export default function CreateSection() {
             <TabsTrigger value="animations">Animations</TabsTrigger>
           </TabsList>
           <TabsContent value="components" className="mt-4">
-            <ComponentSection />
+            <ComponentSection
+              selectedComponent={selectedComponent}
+              onSelect={onSelectComponent}
+            />
           </TabsContent>
           <TabsContent value="animations" className="mt-4">
-            <AnimationSection />
+            <AnimationSection
+              selectedAnimation={selectedAnimation}
+              onSelect={onSelectAnimation}
+            />
           </TabsContent>
         </Tabs>
       </CardContent>

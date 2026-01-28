@@ -8,12 +8,13 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/ui/tabs";
 import ComponentSection from "./ComponentSection";
 import AnimationSection from "./AnimationSection";
-import { ComponentId } from "@/lib/components";
+import { ComponentId, CategoryId } from "@/lib/components";
 import { AnimationId } from "@/lib/animations";
 
 interface CreateSectionProps {
   selectedComponent: ComponentId | null;
   selectedAnimation: AnimationId | null;
+  selectedCategory: CategoryId | "all";
   onSelectComponent: (id: ComponentId) => void;
   onSelectAnimation: (id: AnimationId) => void;
 }
@@ -21,11 +22,12 @@ interface CreateSectionProps {
 export default function CreateSection({
   selectedComponent,
   selectedAnimation,
+  selectedCategory,
   onSelectComponent,
   onSelectAnimation,
 }: CreateSectionProps) {
   return (
-    <Card className="w-full lg:w-[380px] flex flex-col shadow-sm">
+    <Card className="w-full lg:w-[380px] flex flex-col shadow-sm shrink-0">
       <CardHeader className="space-y-1 pb-4">
         <CardTitle className="text-xl font-semibold">Create</CardTitle>
         <CardDescription className="text-sm">
@@ -45,6 +47,7 @@ export default function CreateSection({
           <TabsContent value="components" className="mt-6">
             <ComponentSection
               selectedComponent={selectedComponent}
+              selectedCategory={selectedCategory}
               onSelect={onSelectComponent}
             />
           </TabsContent>
